@@ -1,3 +1,5 @@
 #!/bin/sh
 
+sed -i "s/localhost_server/$(curl -s http://myip.enix.org/REMOTE_ADDR)/g" /etc/nginx/sites-enabled/localhost.conf
+
 service nginx start
