@@ -8,4 +8,4 @@ branches:
     - master
 
 script:
-  - docker build
+  - docker build .
