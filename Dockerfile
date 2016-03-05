@@ -2,15 +2,13 @@ FROM phusion/baseimage:
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV DEBIAN_FRONTEND noninteractive
-
-ENV NGINX_VERSION 1.9.9
-ENV NPS_VERSION 1.10.33.2
+ENV NGINX_VERSION 1.9.12
+ENV NPS_VERSION 1.10.33.6
 ENV UPM_VERSION 0.9.1
-ENV NGINX_USER www-data
+ENV NGINX_USER root
 ENV SETUP_DIR /var/cache/nginx
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && apt-get install -y \
     gcc \
     g++ \
     wget \
