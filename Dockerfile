@@ -1,4 +1,4 @@
-FROM phusion/baseimage:
+FROM phusion/baseimage
 
 MAINTAINER ivan@lagunovsky.com
 
