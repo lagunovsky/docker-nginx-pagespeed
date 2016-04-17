@@ -26,7 +26,7 @@ RUN mkdir -p ${SETUP_DIR}
 
 # Prepare module
 RUN cd ${SETUP_DIR} \
-    && wget https://github.com/pagespeed/ngx_pagespeed/releases/tag/v${NPS_VERSION}-beta.tar.gz --no-check-certificate \
+    && wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.tar.gz --no-check-certificate \
     && tar zxvf v${NPS_VERSION}-beta.tar.gz \
     && cd ngx_pagespeed-${NPS_VERSION}-beta \
     && wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz --no-check-certificate \
