@@ -9,6 +9,7 @@ ENV NGINX_USER root
 ENV SETUP_DIR /var/cache/nginx
 
 RUN apt-get update && apt-get upgrade -y --no-install-recommends && apt-get install -y \
+    curl \
     gcc \
     g++ \
     wget \
@@ -83,7 +84,10 @@ RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && ./configure \
 RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && make && make install
 RUN nginx -V
 
+RUN sed -i "s/localhost_server/$(curl -s http://myip.enix.org/REMOTE_ADDR)/g" /etc/nginx/sites-enabled/localhost.conf
+
 RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false \
+    curl \
     gcc \
     g++ \
     wget \
@@ -114,8 +118,6 @@ RUN mkdir /usr/share/nginx \
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
-
-RUN sed -i "s/localhost_server/$(curl -s http://myip.enix.org/REMOTE_ADDR)/g" /etc/nginx/sites-enabled/localhost.conf
 
 EXPOSE 80 443
 
