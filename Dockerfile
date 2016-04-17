@@ -1,9 +1,9 @@
-FROM phusion/baseimage
+FROM debian:jessie
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION 1.9.12
-ENV NPS_VERSION 1.10.33.6
+ENV NGINX_VERSION 1.9.14
+ENV NPS_VERSION 1.11.33.0
 ENV UPM_VERSION 0.9.1
 ENV NGINX_USER root
 ENV SETUP_DIR /var/cache/nginx
@@ -26,7 +26,7 @@ RUN mkdir -p ${SETUP_DIR}
 
 # Prepare module
 RUN cd ${SETUP_DIR} \
-    && wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.tar.gz --no-check-certificate \
+    && wget https://github.com/pagespeed/ngx_pagespeed/releases/tag/v${NPS_VERSION}-beta.tar.gz --no-check-certificate \
     && tar zxvf v${NPS_VERSION}-beta.tar.gz \
     && cd ngx_pagespeed-${NPS_VERSION}-beta \
     && wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz --no-check-certificate \
@@ -115,7 +115,8 @@ RUN mkdir /usr/share/nginx \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-ADD start-nginx /etc/my_init.d/start-nginx.sh
-RUN chmod +x  /etc/my_init.d/start-nginx.sh
+RUN sed -i "s/localhost_server/$(curl -s http://myip.enix.org/REMOTE_ADDR)/g" /etc/nginx/sites-enabled/localhost.conf
 
 EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]
