@@ -9,7 +9,6 @@ ENV NGINX_USER root
 ENV SETUP_DIR /var/cache/nginx
 
 RUN apt-get update && apt-get upgrade -y --no-install-recommends && apt-get install -y \
-    curl \
     gcc \
     g++ \
     wget \
@@ -22,6 +21,8 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends && apt-get inst
     libgd2-xpm-dev \
     libgeoip-dev \
     --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y curl
 
 RUN mkdir -p ${SETUP_DIR}
 
