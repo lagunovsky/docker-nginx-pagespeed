@@ -83,7 +83,21 @@ RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && ./configure \
     --add-module=${SETUP_DIR}/nginx-upload-progress-module-${UPM_VERSION}
 
 RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && make && make install
-RUN nginx -V
+
+COPY config/ /etc/nginx/
+
+RUN mkdir /etc/nginx/sites-enabled/ \
+    && mkdir -p /var/lib/nginx/body
+
+ADD scripts/nginx /etc/init.d/nginx
+RUN chmod +x /etc/init.d/nginx \
+    && update-rc.d nginx defaults
+
+RUN mkdir /usr/share/nginx \
+    && ln -sf /opt/nginx/html /usr/share/nginx/html
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 RUN sed -i "s/localhost_server/$(curl -s http://myip.enix.org/REMOTE_ADDR)/g" /etc/nginx/sites-enabled/localhost.conf
 
@@ -99,26 +113,9 @@ RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
     zlib1g-dev \
     libssl-dev \
     libgd2-xpm-dev
-
 RUN apt-get clean all
 RUN rm -rf ${SETUP_DIR}/{nginx,ngx_pagespeed}
 RUN rm -rf /var/lib/apt/lists/*
-
-COPY config/ /etc/nginx/
-
-RUN mkdir /etc/nginx/sites-enabled/ \
-    && mkdir -p /var/lib/nginx/body
-
-ADD scripts/nginx /etc/init.d/nginx
-RUN chmod +x /etc/init.d/nginx \
-    && update-rc.d nginx defaults
-
-RUN mkdir /usr/share/nginx \
-    && ln -sf /opt/nginx/html /usr/share/nginx/html
-
-# forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /var/log/nginx/access.log
-RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80 443
 
