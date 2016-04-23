@@ -99,8 +99,6 @@ RUN mkdir /usr/share/nginx \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-RUN sed -i "s/localhost_server/$(curl -s http://myip.enix.org/REMOTE_ADDR)/g" /etc/nginx/sites-enabled/localhost.conf
-
 RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false \
     curl \
     gcc \
