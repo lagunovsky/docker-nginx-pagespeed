@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM ubuntu:xenial
 
 MAINTAINER ivan@lagunovsky.com
 
