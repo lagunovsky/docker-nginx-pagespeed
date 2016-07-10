@@ -132,7 +132,8 @@ RUN apk del .build-deps && \
     rm -rf /tmp/* && \
     rm -rf /var/cache/apk/*
 
-COPY config/ /etc/nginx/
+COPY config/conf.d /etc/nginx/conf.d
+COPY config/nginx.conf /etc/nginx/nginx.conf
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
