@@ -1,10 +1,9 @@
-FROM ubuntu:xenial
+FROM ubuntu:14.04
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION 1.9.14
-ENV NPS_VERSION 1.11.33.0
-ENV UPM_VERSION 0.9.1
+ENV NGINX_VERSION 1.11.2
+ENV NPS_VERSION 1.11.33.2
 ENV NGINX_USER root
 ENV SETUP_DIR /var/cache/nginx
 
@@ -33,10 +32,6 @@ RUN cd ${SETUP_DIR} \
     && cd ngx_pagespeed-${NPS_VERSION}-beta \
     && wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz --no-check-certificate \
     && tar -xzvf ${NPS_VERSION}.tar.gz
-
-RUN cd ${SETUP_DIR} \
-    && wget https://github.com/masterzen/nginx-upload-progress-module/archive/v${UPM_VERSION}.tar.gz --no-check-certificate \
-    && tar zxvf v${UPM_VERSION}.tar.gz
 
 # Install nginx
 RUN wget -P ${SETUP_DIR} http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
@@ -79,8 +74,7 @@ RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && ./configure \
     --with-stream_ssl_module \
     --with-http_slice_module \
     --with-http_v2_module \
-    --add-module=${SETUP_DIR}/ngx_pagespeed-${NPS_VERSION}-beta \
-    --add-module=${SETUP_DIR}/nginx-upload-progress-module-${UPM_VERSION}
+    --add-module=${SETUP_DIR}/ngx_pagespeed-${NPS_VERSION}-beta
 
 RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && make && make install
 
