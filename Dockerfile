@@ -82,7 +82,8 @@ COPY config/conf.d/ /etc/nginx/conf.d/
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir /usr/share/nginx \
-    && ln -sf /opt/nginx/html /usr/share/nginx/html
+    && ln -sf /opt/nginx/html /usr/share/nginx/html \
+    && mkdir -p /var/lib/nginx/body
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
