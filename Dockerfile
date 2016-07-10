@@ -79,7 +79,6 @@ RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && ./configure \
 RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && make && make install
 
 COPY config/conf.d/ /etc/nginx/conf.d/
-COPY config/sites-enabled/ /etc/nginx/sites-enabled/
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir /usr/share/nginx \
