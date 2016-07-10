@@ -116,7 +116,8 @@ RUN mkdir -p ${SOURCE_DIR}/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol && \
         --with-mail_ssl_module \
         --with-threads \
         --with-stream \
-        --with-stream_ssl_module
+        --with-stream_ssl_module \
+        --prefix=/etc/nginx \
         --conf-path=/etc/nginx/nginx.conf \
         --http-log-path=/var/log/nginx/access.log \
         --error-log-path=/var/log/nginx/error.log \
