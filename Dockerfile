@@ -39,7 +39,7 @@ RUN tar -zxvf ${SETUP_DIR}/nginx-${NGINX_VERSION}.tar.gz -C ${SETUP_DIR}
 RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && ./configure \
     --prefix=/opt/nginx \
     --sbin-path=/usr/sbin/nginx \
-    --conf-path=/opt/nginx/nginx.conf \
+    --conf-path=/etc/nginx/nginx.conf \
     --pid-path=/var/run/nginx.pid \
     --lock-path=/var/run/nginx.lock \
     --http-client-body-temp-path=/var/lib/nginx/body \
@@ -78,14 +78,9 @@ RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && ./configure \
 
 RUN cd ${SETUP_DIR}/nginx-${NGINX_VERSION} && make && make install
 
-COPY config/ /etc/nginx/
-
-RUN mkdir /etc/nginx/sites-enabled/ \
-    && mkdir -p /var/lib/nginx/body
-
-ADD scripts/nginx /etc/init.d/nginx
-RUN chmod +x /etc/init.d/nginx \
-    && update-rc.d nginx defaults
+COPY config/conf.d/ /etc/nginx/conf.d/
+COPY config/sites-enabled/ /etc/nginx/sites-enabled/
+COPY config/nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir /usr/share/nginx \
     && ln -sf /opt/nginx/html /usr/share/nginx/html
