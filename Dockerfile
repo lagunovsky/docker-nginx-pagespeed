@@ -4,15 +4,13 @@ MAINTAINER ivan@lagunovsky.com
 
 ENV NGINX_VERSION=1.11.5 \
      PAGESPEED_VERSION=1.11.33.4 \
-     SOURCE_DIR=/tmp/src \
-     LIBPNG_LIB=libpng12 \
      LIBPNG_VERSION=1.2.56 \
      PAGESPEED_ENABLE=on
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
-    apk upgrade --update --no-cache && \
+    apk upgrade --no-cache --update && \
     apk add --no-cache --update \
         bash \
         ca-certificates \
@@ -27,7 +25,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repos
         zlib
 
 RUN set -x && \
-    apk add --no-cache --update -t .build-deps \
+    apk --no-cache add -t .build-deps \
         apache2-dev \
         apr-dev \
         apr-util-dev \
@@ -52,11 +50,11 @@ RUN set -x && \
     curl -L https://dl.google.com/dl/linux/mod-pagespeed/tar/beta/mod-pagespeed-beta-${PAGESPEED_VERSION}-r0.tar.bz2 | tar -jx && \
     curl -L https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}-beta.tar.gz | tar -zx && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION} && \
-    curl -L https://raw.githubusercontent.com/lagun4ik/alpine-nginx-pagespeed/master/patches/automatic_makefile.patch | patch -p1 && \
-    curl -L https://raw.githubusercontent.com/lagun4ik/alpine-nginx-pagespeed/master/patches/libpng_cflags.patch | patch -p1 && \
-    curl -L https://raw.githubusercontent.com/lagun4ik/alpine-nginx-pagespeed/master/patches/pthread_nonrecursive_np.patch | patch -p1 && \
-    curl -L https://raw.githubusercontent.com/lagun4ik/alpine-nginx-pagespeed/master/patches/rename_c_symbols.patch | patch -p1 && \
-    curl -L https://raw.githubusercontent.com/lagun4ik/alpine-nginx-pagespeed/master/patches/stack_trace_posix.patch | patch -p1 && \
+    curl -L https://raw.githubusercontent.com/wunderkraut/alpine-nginx-pagespeed/master/patches/automatic_makefile.patch | patch -p1 && \
+    curl -L https://raw.githubusercontent.com/wunderkraut/alpine-nginx-pagespeed/master/patches/libpng_cflags.patch | patch -p1 && \
+    curl -L https://raw.githubusercontent.com/wunderkraut/alpine-nginx-pagespeed/master/patches/pthread_nonrecursive_np.patch | patch -p1 && \
+    curl -L https://raw.githubusercontent.com/wunderkraut/alpine-nginx-pagespeed/master/patches/rename_c_symbols.patch | patch -p1 && \
+    curl -L https://raw.githubusercontent.com/wunderkraut/alpine-nginx-pagespeed/master/patches/stack_trace_posix.patch | patch -p1 && \
     ./generate.sh -D use_system_libs=1 -D _GLIBCXX_USE_CXX11_ABI=0 -D use_system_icu=1 && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION}/src && \
     make BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
@@ -93,7 +91,6 @@ RUN set -x && \
         --without-mail_pop3_module \
         --without-mail_imap_module \
         --without-mail_smtp_module \
-        --without-http_split_clients_module \
         --without-http_scgi_module \
         --without-http_upstream_ip_hash_module \
         --prefix=/etc/nginx \
@@ -122,7 +119,7 @@ COPY docker-entrypoint.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-VOLUME ["/var/cache/ngx_pagespeed_cache"]
+VOLUME ["/var/cache/ngx_pagespeed"]
 
 EXPOSE 80 443
 ENTRYPOINT ["docker-entrypoint.sh"]

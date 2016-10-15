@@ -10,4 +10,4 @@ services:
     volumes:
       - ./sites-enabled:/etc/nginx/sites-enabled
       - ./www/:/var/www/
-      - ./cache/ngx_pagespeed_cache:/var/cache/ngx_pagespeed_cache
+      - ./cache/ngx_pagespeed:/var/cache/ngx_pagespeed
