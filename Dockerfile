@@ -2,8 +2,8 @@ FROM alpine:3.4
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION 1.11.2
-ENV PAGESPEED_VERSION 1.11.33.2
+ENV NGINX_VERSION 1.11.5
+ENV PAGESPEED_VERSION 1.11.33.4
 ENV SOURCE_DIR /tmp/src
 ENV LIBPNG_LIB libpng12
 ENV LIBPNG_VERSION 1.2.56
@@ -93,9 +93,9 @@ RUN set -x && \
         --without-http_split_clients_module \
         --without-http_uwsgi_module \
         --without-http_scgi_module \
-        --without-http_referer_module \
         --without-http_upstream_ip_hash_module \
         --with-poll_module \
+        --with-http_referer_module \
         --with-select_module \
         --with-http_addition_module \
         --with-http_sub_module \
