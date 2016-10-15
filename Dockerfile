@@ -96,7 +96,6 @@ RUN set -x && \
         --without-http_scgi_module \
         --without-http_upstream_ip_hash_module \
         --with-poll_module \
-        --with-http_referer_module \
         --with-select_module \
         --with-http_addition_module \
         --with-http_sub_module \
