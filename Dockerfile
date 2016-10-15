@@ -5,6 +5,7 @@ MAINTAINER ivan@lagunovsky.com
 ENV NGINX_VERSION=1.11.5 \
      PAGESPEED_VERSION=1.11.33.4 \
      LIBPNG_VERSION=1.2.56 \
+     MAKE_J=32 \
      PAGESPEED_ENABLE=on
 
 RUN apk upgrade --no-cache --update && \
@@ -41,7 +42,7 @@ RUN set -x && \
     curl -L http://prdownloads.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz | tar -zx && \
     cd /tmp/libpng-${LIBPNG_VERSION} && \
     ./configure --build=$CBUILD --host=$CHOST --prefix=/usr --enable-shared --with-libpng-compat && \
-    make -j8 install V=0 && \
+    make -j${MAKE_J} install V=0 && \
     # Build PageSpeed
     cd /tmp && \
     curl -L https://dl.google.com/dl/linux/mod-pagespeed/tar/beta/mod-pagespeed-beta-${PAGESPEED_VERSION}-r0.tar.bz2 | tar -jx && \
@@ -54,9 +55,9 @@ RUN set -x && \
     curl -L https://raw.githubusercontent.com/lagun4ik/docker-nginx-pagespeed/master/patches/stack_trace_posix.patch | patch -p1 && \
     ./generate.sh -D use_system_libs=1 -D _GLIBCXX_USE_CXX11_ABI=0 -D use_system_icu=1 && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION}/src && \
-    make -j8 BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
+    make -j${MAKE_J} BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION}/src/pagespeed/automatic/ && \
-    make -j8 psol BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
+    make -j${MAKE_J} psol BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
     mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol && \
     mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/lib/Release/linux/x64 && \
     mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/out/Release && \
@@ -73,7 +74,6 @@ RUN set -x && \
     curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar -zx && \
     cd /tmp/nginx-${NGINX_VERSION} && \
     LD_LIBRARY_PATH=/tmp/modpagespeed-${PAGESPEED_VERSION}/usr/lib ./configure \
-        --with-ipv6
         --sbin-path=/usr/sbin \
         --modules-path=/usr/lib/nginx \
         --with-http_ssl_module \
@@ -107,7 +107,7 @@ RUN set -x && \
         --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta \
         --with-cc-opt="-fPIC -I /usr/include/apr-1" \
         --with-ld-opt="-luuid -lapr-1 -laprutil-1 -licudata -licuuc -L/tmp/modpagespeed-${PAGESPEED_VERSION}/usr/lib -lpng12 -lturbojpeg -ljpeg" && \
-    make -j8 install --silent && \
+    make -j${MAKE_J} install --silent && \
     # Clean-up
     cd && \
     apk del .build-deps && \
