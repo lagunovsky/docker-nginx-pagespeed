@@ -73,23 +73,32 @@ RUN set -x && \
     curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar -zx && \
     cd /tmp/nginx-${NGINX_VERSION} && \
     LD_LIBRARY_PATH=/tmp/modpagespeed-${PAGESPEED_VERSION}/usr/lib ./configure \
+        --with-ipv6
         --sbin-path=/usr/sbin \
         --modules-path=/usr/lib/nginx \
         --with-http_ssl_module \
         --with-http_gzip_static_module \
         --with-file-aio \
         --with-http_v2_module \
+        --with-http_realip_module \
         --without-http_autoindex_module \
         --without-http_browser_module \
         --without-http_geo_module \
-        --without-http_map_module \
         --without-http_memcached_module \
         --without-http_userid_module \
         --without-mail_pop3_module \
         --without-mail_imap_module \
         --without-mail_smtp_module \
+        --without-http_split_clients_module \
+        --without-http_uwsgi_module \
         --without-http_scgi_module \
         --without-http_upstream_ip_hash_module \
+        --with-http_sub_module \
+        --with-http_gunzip_module \
+        --with-http_secure_link_module \
+        --with-threads \
+        --with-stream \
+        --with-stream_ssl_module \
         --prefix=/etc/nginx \
         --conf-path=/etc/nginx/nginx.conf \
         --http-log-path=/var/log/nginx/access.log \
