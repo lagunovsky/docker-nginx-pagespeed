@@ -2,11 +2,11 @@ FROM alpine:3.4
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION 1.11.5 \
-     PAGESPEED_VERSION 1.11.33.4 \
-     SOURCE_DIR /tmp/src \
-     LIBPNG_LIB libpng12 \
-     LIBPNG_VERSION 1.2.56 \
+ENV NGINX_VERSION=1.11.5 \
+     PAGESPEED_VERSION=1.11.33.4 \
+     SOURCE_DIR=/tmp/src \
+     LIBPNG_LIB=libpng12 \
+     LIBPNG_VERSION=1.2.56 \
      PAGESPEED_ENABLE=on
 
 RUN set -x && \
