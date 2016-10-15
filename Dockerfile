@@ -9,7 +9,11 @@ ENV NGINX_VERSION=1.11.5 \
      LIBPNG_VERSION=1.2.56 \
      PAGESPEED_ENABLE=on
 
-RUN apk --no-cache add \
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    apk upgrade --update --no-cache && \
+    apk --no-cache --update add && \
         bash
         ca-certificates \
         libuuid \
