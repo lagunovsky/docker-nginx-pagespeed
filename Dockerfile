@@ -2,11 +2,12 @@ FROM alpine:3.4
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION 1.11.5
-ENV PAGESPEED_VERSION 1.11.33.4
-ENV SOURCE_DIR /tmp/src
-ENV LIBPNG_LIB libpng12
-ENV LIBPNG_VERSION 1.2.56
+ENV NGINX_VERSION 1.11.5 \
+     PAGESPEED_VERSION 1.11.33.4 \
+     SOURCE_DIR /tmp/src \
+     LIBPNG_LIB libpng12 \
+     LIBPNG_VERSION 1.2.56 \
+     PAGESPEED_ENABLE=on
 
 RUN set -x && \
     apk --no-cache --update add \
@@ -123,15 +124,20 @@ RUN set -x && \
    make && \
    make install && \
    apk del .build-deps && \
-    rm -rf /tmp/* && \
-    rm -rf /var/cache/apk/*
+   rm -rf /tmp/* && \
+   rm -rf /var/cache/apk/* && \
+   ln -sf /dev/stdout /var/log/nginx/access.log && \
+   ln -sf /dev/stderr /var/log/nginx/error.log &&
+   mkdir -p /var/cache/ngx_pagespeed_cache
 
 COPY config/conf.d /etc/nginx/conf.d
 COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY docker-entrypoint.sh /usr/local/bin/
 
-RUN ln -sf /dev/stdout /var/log/nginx/access.log
-RUN ln -sf /dev/stderr /var/log/nginx/error.log
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+VOLUME ["/var/cache/ngx_pagespeed_cache"]
 
 EXPOSE 80 443
-
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
