@@ -127,7 +127,7 @@ RUN set -x && \
    rm -rf /tmp/* && \
    rm -rf /var/cache/apk/* && \
    ln -sf /dev/stdout /var/log/nginx/access.log && \
-   ln -sf /dev/stderr /var/log/nginx/error.log &&
+   ln -sf /dev/stderr /var/log/nginx/error.log && \
    mkdir -p /var/cache/ngx_pagespeed_cache
 
 COPY config/conf.d /etc/nginx/conf.d
