@@ -14,7 +14,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repos
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
     apk upgrade --update --no-cache && \
     apk --no-cache --update add && \
-        bash
+        bash \
         ca-certificates \
         libuuid \
         apr \
