@@ -1,37 +1,67 @@
-# 🏂 Lightweight Docker Image include Nginx with PageSpeed module
+# 🏂 Nginx with PageSpeed module [dev]
  [![Build Status](https://travis-ci.org/lagun4ik/docker-nginx-pagespeed.svg)](https://travis-ci.org/lagun4ik/docker-nginx-pagespeed)
 
-This PHP docker image based on [Alpine](https://hub.docker.com/_/alpine/). Alpine is based on [Alpine Linux](http://www.alpinelinux.org), lightweight Linux distribution based on [BusyBox](https://hub.docker.com/_/busybox/). The size of the image is very small.
-
-### PageSpeed
-The [PageSpeed](https://developers.google.com/speed/pagespeed/) tools analyze and optimize your site following web best practices.
-
-### Getting The Image
-
-This image is published in the [Docker Hub](https://hub.docker.com/r/lagun4ik/docker-nginx-pagespeed/) as `lagun4ik/docker-nginx-pagespeed`
-
-### Configuration
-
-The config is set using environments
-```docker
-#default values
-PAGESPEED_ENABLE=on # || off
+## Snippets
+```nginx
+  include snippets/pagespeed.conf;
+  include snippets/php.conf;
+  include snippets/proxy.conf;
+  include snippets/static.conf;
 ```
 
-### Example compose file
+### pagespeed.conf
+```nginx
+pagespeed RewriteLevel CoreFilters;
+pagespeed EnableFilters remove_comments,collapse_whitespace,rewrite_images,resize_images,resize_rendered_image_dimensions,prioritize_critical_css,insert_dns_prefetch,combine_css,rewrite_css,combine_javascript,rewrite_javascript;
+```
 
-```yaml
-version: '2'
+### php.conf
+```nginx
+location / {
+  try_files $uri $uri/ /index.php$args;
+}
 
-services:
-  nginx:
-    image: lagun4ik/docker-nginx-pagespeed
-    restart: always
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./sites-enabled:/etc/nginx/sites-enabled
-      - ./www/:/var/www/
-      - ./cache/ngx_pagespeed:/var/cache/ngx_pagespeed
+location ~ \.php$ {
+  fastcgi_index index.php;
+  fastcgi_split_path_info ^(.+\.php)(/.*)$;
+  fastcgi_pass php:9000;
+  include /etc/nginx/fastcgi_params;
+  fastcgi_param  SCRIPT_FILENAME  $realpath_root$fastcgi_script_name;
+  fastcgi_param DOCUMENT_ROOT $realpath_root;
+}
+
+```
+
+### proxy.conf
+```nginx
+proxy_set_header Host $http_host;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Forwarded-Port $server_port;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_read_timeout 900;
+```
+
+### static.conf
+```nginx
+location = /favicon.ico {
+  log_not_found off;
+  access_log off;
+}
+
+location = /robots.txt {
+  allow all;
+  log_not_found off;
+  access_log off;
+}
+
+location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+  expires max;
+  log_not_found off;
+}
+
+error_page 500 502 503 504 /50x.html;
+
+location = /50x.html {
+  root /usr/share/nginx/html;
+}
 ```
