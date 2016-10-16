@@ -25,7 +25,7 @@ version: '2'
 
 services:
   nginx:
-    image: lagun4ik/docker-nginx-pagespeed
+    image: lagun4ik/nginx-pagespeed
     restart: always
     ports:
       - '80:80'
