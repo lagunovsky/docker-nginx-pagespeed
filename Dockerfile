@@ -5,7 +5,7 @@ MAINTAINER ivan@lagunovsky.com
 ENV NGINX_VERSION=1.11.5 \
      PAGESPEED_VERSION=1.11.33.4 \
      LIBPNG_VERSION=1.2.56 \
-     MAKE_J=32 \
+     MAKE_J=4 \
      PAGESPEED_ENABLE=on
 
 RUN apk upgrade --no-cache --update && \
