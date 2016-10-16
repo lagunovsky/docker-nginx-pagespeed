@@ -8,7 +8,7 @@ The [PageSpeed](https://developers.google.com/speed/pagespeed/) tools analyze an
 
 ### Getting The Image
 
-This image is published in the [Docker Hub](https://hub.docker.com/r/lagun4ik/docker-nginx-pagespeed/) as `lagun4ik/docker-nginx-pagespeed`
+This image is published in the [Docker Hub](https://hub.docker.com/r/lagun4ik/nginx-pagespeed/) as `lagun4ik/nginx-pagespeed`
 
 ### Configuration
 
