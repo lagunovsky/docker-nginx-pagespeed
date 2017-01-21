@@ -46,7 +46,7 @@ RUN set -x && \
     # Build PageSpeed
     cd /tmp && \
     curl -L https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}-beta.tar.gz | tar -zx && \
-    cd /tmp/modpagespeed-${PAGESPEED_VERSION} && \
+    cd /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta && \
     curl -L https://raw.githubusercontent.com/lagun4ik/docker-nginx-pagespeed/master/patches/automatic_makefile.patch | patch -p1 && \
     curl -L https://raw.githubusercontent.com/lagun4ik/docker-nginx-pagespeed/master/patches/libpng_cflags.patch | patch -p1 && \
     curl -L https://raw.githubusercontent.com/lagun4ik/docker-nginx-pagespeed/master/patches/pthread_nonrecursive_np.patch | patch -p1 && \
