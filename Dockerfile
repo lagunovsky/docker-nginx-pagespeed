@@ -2,7 +2,7 @@ FROM alpine:3.4
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION=1.11.8 \
+ENV NGINX_VERSION=1.11.9 \
      PAGESPEED_VERSION=1.11.33.4 \
      LIBPNG_VERSION=1.2.56 \
      MAKE_J=4 \
