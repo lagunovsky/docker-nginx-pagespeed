@@ -1,7 +1,7 @@
 # 🏂 Lightweight Docker Image include Nginx with PageSpeed module
  [![Build Status](https://travis-ci.org/lagun4ik/docker-nginx-pagespeed.svg)](https://travis-ci.org/lagun4ik/docker-nginx-pagespeed)
 
-This PHP docker image based on [Alpine](https://hub.docker.com/_/alpine/). Alpine is based on [Alpine Linux](http://www.alpinelinux.org), lightweight Linux distribution based on [BusyBox](https://hub.docker.com/_/busybox/). The size of the image is very small.
+This docker image based on [Alpine](https://hub.docker.com/_/alpine/). Alpine is based on [Alpine Linux](http://www.alpinelinux.org), lightweight Linux distribution based on [BusyBox](https://hub.docker.com/_/busybox/). The size of the image is very small.
 
 ## PageSpeed
 The [PageSpeed](https://developers.google.com/speed/pagespeed/) tools analyze and optimize your site following web best practices.
