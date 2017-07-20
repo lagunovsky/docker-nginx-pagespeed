@@ -8,7 +8,7 @@ The [PageSpeed](https://developers.google.com/speed/pagespeed/) tools analyze an
 
 ## Supported tags and `Dockerfile` links
 
- - [`1.13.0`, `latest` (Dockerfile)](https://github.com/lagun4ik/docker-nginx-pagespeed/blob/master/Dockerfile)
+ - [`1.13.3`, `latest` (Dockerfile)](https://github.com/lagun4ik/docker-nginx-pagespeed/blob/master/Dockerfile)
  - [`1.11.13` (Dockerfile)](https://github.com/lagun4ik/docker-nginx-pagespeed/blob/1.11.13/Dockerfile)
 
 This image is published in the [Docker Hub](https://hub.docker.com/r/lagun4ik/nginx-pagespeed/) as `lagun4ik/nginx-pagespeed`
