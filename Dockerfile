@@ -2,7 +2,7 @@ FROM alpine:3.4
 
 MAINTAINER ivan@lagunovsky.com
 
-ENV NGINX_VERSION=1.13.3 \
+ENV NGINX_VERSION=1.13.4 \
      PAGESPEED_VERSION=1.11.33.4 \
      LIBPNG_VERSION=1.2.56 \
      MAKE_J=4 \
@@ -37,6 +37,8 @@ RUN set -x && \
         pcre-dev \
         python \
         zlib-dev && \
+	addgroup -g 1000 -S nginx && \
+	adduser -u 1000 -D -S -h /var/cache/ngx_pagespeed -s /sbin/nologin -G nginx nginx && \
     # Build libpng
     cd /tmp && \
     curl -L http://prdownloads.sourceforge.net/libpng/libpng-${LIBPNG_VERSION}.tar.gz | tar -zx && \
@@ -114,10 +116,7 @@ RUN set -x && \
     rm -rf /tmp/* && \
     # Forward request and error logs to docker log collector
     ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log && \
-    # Make PageSpeed cache writable
-    mkdir -p /var/cache/ngx_pagespeed && \
-    chmod -R o+wr /var/cache/ngx_pagespeed
+    ln -sf /dev/stderr /var/log/nginx/error.log
 
 COPY config/conf.d /etc/nginx/conf.d
 COPY config/nginx.conf /etc/nginx/nginx.conf
